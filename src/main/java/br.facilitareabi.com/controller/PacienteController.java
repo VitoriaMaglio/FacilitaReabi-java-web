@@ -1,8 +1,13 @@
 package br.facilitareabi.com.controller;
 import br.facilitareabi.com.dao.PacienteDao;
 import br.facilitareabi.com.model.Paciente;
+import br.facilitareabi.com.model.Usuario;
 import br.facilitareabi.com.service.PacienteService;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +19,11 @@ public class PacienteController {
     PacienteDao pacienteDao = new PacienteDao();
     Paciente paciente = new Paciente();
     private PacienteService pacienteService = new PacienteService();
+
+
+
+
+
     public Paciente cadastrarPaciente() {
         System.out.println("Digite o nome:");
         paciente.setNome(scanner.nextLine());
