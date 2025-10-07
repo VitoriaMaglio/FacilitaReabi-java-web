@@ -2,7 +2,10 @@ package br.facilitareabi.com.controller;
 import br.facilitareabi.com.dao.UsuarioDao;
 import br.facilitareabi.com.model.Usuario;
 import br.facilitareabi.com.service.UsuarioService;
+import jakarta.ws.rs.Path;
+
 import java.util.Scanner;
+@Path("/usuario")
 public class UsuarioController {
     private UsuarioService usuarioService = new UsuarioService();
     Usuario usuario = new Usuario();

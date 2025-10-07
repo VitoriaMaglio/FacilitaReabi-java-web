@@ -5,16 +5,21 @@ import br.facilitareabi.com.model.Consulta;
 import br.facilitareabi.com.model.Paciente;
 import br.facilitareabi.com.service.ConsultaService;
 import br.facilitareabi.com.service.ConsultaServiceImpl;
+import jakarta.ws.rs.Path;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+
+@Path("/consulta")
 public class ConsultaController {
 
     private ConsultaService consultaService = new ConsultaServiceImpl();
     private Scanner scanner = new Scanner(System.in);
     Scanner leitor = new Scanner(System.in);
     Consulta consulta = new Consulta();
+
     public void verificarPaciente(Paciente paciente) {
         if (consultaService.verificarAptoParaConsulta(paciente)) {
             System.out.println("Paciente apto para teleconsulta.");

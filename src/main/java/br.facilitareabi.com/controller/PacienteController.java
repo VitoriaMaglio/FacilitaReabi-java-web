@@ -2,10 +2,13 @@ package br.facilitareabi.com.controller;
 import br.facilitareabi.com.dao.PacienteDao;
 import br.facilitareabi.com.model.Paciente;
 import br.facilitareabi.com.service.PacienteService;
+import jakarta.ws.rs.Path;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+@Path("/paciente")
 public class PacienteController {
     Scanner scanner = new Scanner(System.in);
     PacienteDao pacienteDao = new PacienteDao();

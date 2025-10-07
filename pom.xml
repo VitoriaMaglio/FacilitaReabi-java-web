@@ -16,6 +16,37 @@
     </dependency>
 
       <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.13.1</version>
+          <scope>test</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>org.glassfish.jersey.core</groupId>
+          <artifactId>jersey-server</artifactId>
+          <version>3.1.1</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.glassfish.jersey.containers</groupId>
+          <artifactId>jersey-container-servlet</artifactId>
+          <version>3.1.1</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.glassfish.jersey.media</groupId>
+          <artifactId>jersey-media-json-jackson</artifactId>
+          <version>3.1.1</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.glassfish.jersey.inject</groupId>
+          <artifactId>jersey-hk2</artifactId>
+          <version>3.1.1</version>
+      </dependency>
+
+      <dependency>
           <groupId>com.oracle.database.jdbc</groupId>
           <artifactId>ojdbc17</artifactId>
           <version>23.9.0.25.07</version>
@@ -31,5 +62,22 @@
   </dependencies>
   <build>
     <finalName>ddd-facilitareabi</finalName>
+      <plugins>
+          <!-- Compilador Java -->
+          <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.13.0</version>
+              <configuration>
+                  <source>21</source>
+                  <target>21</target>
+              </configuration>
+          </plugin>
+
+          <!-- Empacota WAR -->
+          <plugin>
+              <artifactId>maven-war-plugin</artifactId>
+              <version>3.4.0</version>
+          </plugin>
+      </plugins>
   </build>
 </project>
