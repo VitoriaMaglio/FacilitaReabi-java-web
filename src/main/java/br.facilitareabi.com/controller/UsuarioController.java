@@ -1,12 +1,14 @@
 package br.facilitareabi.com.controller;
 import br.facilitareabi.com.dao.UsuarioDao;
-import br.facilitareabi.com.dto.UsuarioDTO;
+import br.facilitareabi.com.dto.UsuarioRequestDTO;
+import br.facilitareabi.com.dto.UsuarioResponseDTO;
 import br.facilitareabi.com.model.Usuario;
 import br.facilitareabi.com.service.UsuarioService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 @Path("/usuario")
@@ -23,17 +25,25 @@ public class UsuarioController {
     @Consumes(MediaType.APPLICATION_JSON)//é uma anotação do JAX-RS (Jersey) que indica qual tipo de dado o método espera receber no corpo da requisição HTTP.
     //RECEBE JSON DO FRONT
     @Produces(MediaType.APPLICATION_JSON)//produz uma resposta em json
-    public Response cadastrarUsuario(Usuario usuario){
+    public Response cadastrarUsuario(UsuarioRequestDTO usuario){
         //Lógica> se os dados não existirem Dados inválidos (400 Bad request)
-        //se não, chama o service e retorna resposta ok insere um novo recurso (201 Created)
-        //UsuarioDTO
-        if (usuario.getLogin() == null && usuario.getSenha() == null){
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Erro nos dados inseridos. Login ou senha inválidos.")
-                    .build();
+        //se não, chama o service que vai cadastrar usuario,
+        // Vamos ter um dto cadastrado atribuido ao service para buscar seu login
+        // se login==login post retorna resposta ok insere um novo recurso (201 Created)
+        // se não, bad request
+        //trata com catch e erro interno
+        try{
+            usuarioService.cadastrar(usuario);
+            UsuarioResponseDTO cadastrado = usuarioService.buscarUsuarioPorLogin(usuario.getLogin());
+            if(cadastrado.getLogin().equals(usuario.getLogin())){ //verificando se o login retornado do banco de dados (cadastrado) é o mesmo login
+                // que foi enviado na requisição (usuario). “O login que eu acabei de buscar no banco é igual ao login que o front mandou?”
+                return Response.status(Response.Status.CREATED).build();
+            } else
+                return Response.status(Response.Status.BAD_REQUEST).build();
+
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        usuarioService.cadastrarUsuario(usuario);
-        return Response.ok(usuario).build();
     }
 
     @GET
@@ -41,16 +51,16 @@ public class UsuarioController {
     @Produces(MediaType.APPLICATION_JSON)
     //@PathParam("login") captura valores direto da URL e envia como parâmetro
     //Tipo do caminho para receber
-    public Response buscarUsuario(@PathParam("login") String login){
-        Usuario usuario = usuarioService.buscarUsuarioPorLogin(login);
+    public Response buscarUsuario(@PathParam("login") String login) throws SQLException {
+        UsuarioResponseDTO usuario = usuarioService.buscarUsuarioPorLogin(login);
         if (usuario == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Usuário não encontrado.")
                     .build();
         }
-        UsuarioDTO usuarioDTO = UsuarioDTO.converterUsuario(usuario); //pega um objeto da entidade e converte ele para dto
+       // UsuarioResponseDTO usuarioDTO = UsuarioResponseDTO.convertToUsuario(usuario); //pega um objeto da entidade e converte ele para dto
         //Você retorna o usuarioDTO que tem apenas os atrbutos específicos para passar pro front.
-        return Response.ok(usuarioDTO).build();
+        return Response.ok(usuario).build();
     }
 
 
@@ -69,15 +79,15 @@ public class UsuarioController {
 
 
 
-    public void cadastrarUsuario(){
-        Usuario usuario = new Usuario();
-        System.out.println("Digite seu login:");
-        usuario.setLogin(scanner.nextLine());
-        System.out.println("Digite sua senha:");
-        usuario.setSenha(scanner.nextLine());
-        usuarioService.cadastrarUsuario(usuario);
-
-    }
+//    public void cadastrarUsuario(){
+//        Usuario usuario = new Usuario();
+//        System.out.println("Digite seu login:");
+//        usuario.setLogin(scanner.nextLine());
+//        System.out.println("Digite sua senha:");
+//        usuario.setSenha(scanner.nextLine());
+//        usuarioService.cadastrarUsuario(usuario);
+//
+//    }
     public void registrarFeedback(Usuario usuario) {
         System.out.println("Digite seu feedback: ");
         String feedback = scanner.nextLine();
@@ -85,16 +95,16 @@ public class UsuarioController {
         usuario.setFeedback(feedback); // também atualiza o objeto
     }
 
-    public void atualizarUsuario(){
-        System.out.println("Deseja atualizar seu usuário?");
-        String resp = scanner.nextLine();
-        if (resp.equalsIgnoreCase("Sim")){
-            cadastrarUsuario();
-            usuarioDao.alterarUsuario(usuario);
-        }else{
-            System.out.println("Ok!");
-        }
-    }
+//    public void atualizarUsuario(){
+//        System.out.println("Deseja atualizar seu usuário?");
+//        String resp = scanner.nextLine();
+//        if (resp.equalsIgnoreCase("Sim")){
+//            cadastrarUsuario();
+//            usuarioDao.alterarUsuario(usuario);
+//        }else{
+//            System.out.println("Ok!");
+//        }
+//    }
     public void excluirUsuario(){
         UsuarioDao usuarioDao = new UsuarioDao();
         System.out.println("Deseja excluir um usuário?");

@@ -5,6 +5,7 @@ import br.facilitareabi.com.controller.UsuarioController;
 import br.facilitareabi.com.dao.ConsultaDao;
 import br.facilitareabi.com.dao.PacienteDao;
 import br.facilitareabi.com.dao.UsuarioDao;
+import br.facilitareabi.com.dto.UsuarioRequestDTO;
 import br.facilitareabi.com.model.Consulta;
 import br.facilitareabi.com.model.Paciente;
 import br.facilitareabi.com.model.Usuario;
@@ -48,7 +49,7 @@ public class Main {
                 String opcao = scanner.nextLine();
                 switch (opcao) {
                     case "1":
-                        usuarioController.cadastrarUsuario();
+                        //usuarioController.cadastrarUsuario();
                         System.out.println("\n============================================\n");
                         System.out.println("Agora vamos fazer seu cadastro como paciente para realizar consultas!");
                         pacienteLogado = controller.cadastrarPaciente();
@@ -90,7 +91,7 @@ public class Main {
                     case "6":
                         if (pacienteLogado != null) {
 
-                            usuarioController.atualizarUsuario();
+                            //usuarioController.atualizarUsuario();
                             System.out.println("\n============================================\n");
                         } else {
                             System.out.println(" Você precisa cadastrar/login de um paciente antes de agendar consulta!");
